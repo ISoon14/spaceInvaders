@@ -2,15 +2,16 @@ import pygame
 import entities.sqllite
 
 # param = textBtn, posX, psoY, width, height, color, color hoover, function called
-def button(screen, msg, x, y, w, h, ic, ac, action=None):
+def button(screen, msg, x, y, w, h, ic, ac, action=None, action2=None):
     black = (0, 0, 0)
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
 
     if x + w > mouse[0] > x and y + h > mouse[1] > y:
         pygame.draw.rect(screen, ac, (x, y, w, h))
-        if click[0] == 1 and action != None:
+        if click[0] == 1 and action != None and action2 != None:
             action()
+            action2()
     else:
         pygame.draw.rect(screen, ic, (x, y, w, h))
 
@@ -78,6 +79,9 @@ def game_over(score):
         pygame.draw.rect(screen, color, input_box, 2)
         sqllite = Sqllite()
         button(screen, "Enregistrer", 300, 175, 250, 50, blue, highlight, sqllite.insert_data(nomjoueur, score))
+        classement = sqllite.get_classement()
+        for score_classement in classement:
+            print(score_classement)
         pygame.display.flip()
         clock.tick(30)
 
