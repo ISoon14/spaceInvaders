@@ -32,18 +32,23 @@ NbMonster = 25
 hero = Hero()
 all_sprites_list.add(hero)
 Monster.containers = monsterList
-column = 0
-line = 0
-for i in range(0, NbMonster):
-    if i % 9 == 0:
-        column = column + 1
-        line = 0
-    else:
-        line = i % 5
 
-    monsterObj = Monster(screen, line, column)
-    monsterList.add(monsterObj)
-    all_sprites_list.add(monsterObj)
+
+def displayMonster(nb, speed):
+    column = 0
+    line = 0
+    for i in range(0, nb):
+        if i % 9 == 0:
+            column = column + 1
+            line = 0
+        else:
+            line = i % 5
+
+        monsterObj = Monster(screen, line, column)
+        monsterObj.setSpeed(speed)
+        monsterList.add(monsterObj)
+        all_sprites_list.add(monsterObj)
+
 
 # La condition d'arrêt du jeu
 done = False
@@ -54,6 +59,12 @@ clock = pygame.time.Clock()
 lastShoot = 0
 score = 0
 hero.rect.y = 370
+xTouch = 0
+lastInsert = time.time()
+timeRespawn = 15
+speedMonster = 5
+
+displayMonster(NbMonster, speedMonster)
 
 while not done:
     # --- Gestion des évènement du jeu
@@ -89,14 +100,16 @@ while not done:
             bullet_list.remove(bullet)
             all_sprites_list.remove(bullet)
             score += 1
-            print(score)
 
         # Enlève la ball quand elle est trop haute sur l'écran à vous de voir quel hauteur précisement
         if bullet.rect.y < -10:
             bullet_list.remove(bullet)
             all_sprites_list.remove(bullet)
 
-
+    if (time.time() - lastInsert) > timeRespawn:
+        speedMonster += 1
+        displayMonster(8, speedMonster)
+        lastInsert = time.time()
 
     # Fait un écran blanc (j'ai fait ça pour mes testes)
     screen.fill((255, 255, 255))
@@ -106,7 +119,11 @@ while not done:
     myfont = pygame.font.SysFont("Arial", 15)
     letter = myfont.render("Score : "+str(score), 0, (0, 0, 0))
     screen.blit(letter, (10, 10))
+    myfont = pygame.font.SysFont("Arial", 15)
+    letter = myfont.render("Prochaine vague dans : " + str(int(timeRespawn - (time.time() - lastInsert))) + ' secondes',
+                           0, (0, 0, 0))
+    screen.blit(letter, (screen.get_rect().width - 250, 10))
     # Met à jour ce qu'on dessine
     pygame.display.flip()
 
-    clock.tick(20)
+    clock.tick(40)
