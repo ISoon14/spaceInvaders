@@ -9,7 +9,6 @@ class window:
     def init(self):
         self.start()
 
-
     def start(self):
         pygame.init()
         # Chargement du logo et du fond
@@ -32,32 +31,36 @@ class window:
         pygame.quit()
 
     def createButtons(self):
-        black = (0, 0, 0)
         yellow = (255, 231, 9)
         blue = (71, 63, 132)
         highlight = (56, 112, 127)
         pygame.init()
-        mouse = pygame.mouse.get_pos()
-
-        if 73 + 152 > mouse[0] > 73 and 350 + 52 > mouse[1] > 352:
-            pygame.draw.rect(self.frame, highlight, (75, 350, 150, 50))
-        else:
-            pygame.draw.rect(self.frame, yellow, (75, 350, 150, 50))
-
-        if 273 + 152 > mouse[0] > 273 and 350 + 52 > mouse[1] > 352:
-            pygame.draw.rect(self.frame, highlight, (275, 350, 150, 50))
-        else:
-            pygame.draw.rect(self.frame, blue, (275, 350, 150, 50))
-
-        textLaunch = pygame.font.Font("tahoma.ttf", 30).render("Jouer !", True, black)
-        textLaunch.center = ((75 + (100 / 2)), (350 + (50 / 2)))
-        self.frame.blit(textLaunch)
+        self.button("Jouer !", 75, 350, 150, 50, blue, highlight, self.exitGame)
+        self.button("Score", 275, 350, 150, 50, yellow, highlight, self.startGame)
         pygame.display.flip()
 
-    def getObject(self):
-        return self.frame
+    def exitGame(self):
+        print("aaaz")
 
-    def text_objects(text, font):
+    def startGame(self):
+        print("eer")
+
+    def button(self, msg, x, y, w, h, ic, ac, action=None):
         black = (0, 0, 0)
-        textSurface = font.render("Jouer !", True, black)
-        return textSurface, textSurface.get_rect()
+        mouse = pygame.mouse.get_pos()
+        click = pygame.mouse.get_pressed()
+
+        if x + w > mouse[0] > x and y + h > mouse[1] > y:
+            pygame.draw.rect(self.frame, ac, (x, y, w, h))
+            if click[0] == 1 and action != None:
+                action()
+        else:
+            pygame.draw.rect(self.frame, ic, (x, y, w, h))
+
+        myfont = pygame.font.SysFont("pictures/retroGaming.ttf", 35)
+        letter = myfont.render(msg, 0, black)
+        self.frame.blit(letter, ((x + (w / 2)), (y + (h / 2))))
+
+    def getObject(self):
+        print("a")
+        return self.frame
