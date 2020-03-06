@@ -43,8 +43,9 @@ class window:
         print("aaaz")
 
     def startGame(self):
-        print("eer")
 
+
+    #param = textBtn, posX, psoY, width, height, color, color hoover, function called
     def button(self, msg, x, y, w, h, ic, ac, action=None):
         black = (0, 0, 0)
         mouse = pygame.mouse.get_pos()
