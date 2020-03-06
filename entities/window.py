@@ -43,7 +43,7 @@ class window:
         print("aaaz")
 
     def startGame(self):
-
+        print('za')
 
     #param = textBtn, posX, psoY, width, height, color, color hoover, function called
     def button(self, msg, x, y, w, h, ic, ac, action=None):
@@ -60,7 +60,7 @@ class window:
 
         myfont = pygame.font.SysFont("pictures/retroGaming.ttf", 35)
         letter = myfont.render(msg, 0, black)
-        self.frame.blit(letter, ((x + (w / 2)), (y + (h / 2))))
+        self.frame.blit(letter, ((x + (w / 3.5)), (y + (h / 3.5))))
 
     def getObject(self):
         print("a")
