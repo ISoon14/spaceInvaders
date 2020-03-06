@@ -21,8 +21,10 @@ class Sqllite:
         self.cursor.execute("""
         INSERT INTO classement(nomJoueur, score) VALUES(?, ?)""", (nomJoueur,score))
         self.conn.commit()
-        self.get_classement()
 
     def get_classement(self):
+        dict = []
         result = self.cursor.execute("""SELECT nomJoueur, score FROM classement order by score desc limit 10 """)
-        return result.fetchAll()
+        for element in result:
+            dict.append({'name' : element[0],'score' : element[1]})
+        return dict
