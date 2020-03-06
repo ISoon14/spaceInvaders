@@ -23,5 +23,5 @@ class Sqllite:
         self.conn.commit()
 
     def get_classement(self):
-        result = self.cursor.execute("""SELECT nomJoueur, score FROM classement order by desc """)
+        result = self.cursor.execute("""SELECT nomJoueur, score FROM classement order by score desc limit 10 """)
         return self.cursor.fetchAll()

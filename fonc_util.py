@@ -76,6 +76,7 @@ def game_over(score):
         screen.blit(letter, (50, 10))
         # Blit the input_box rect.
         pygame.draw.rect(screen, color, input_box, 2)
+        sqllite = Sqllite()
         button(screen, "Enregistrer", 300, 175, 250, 50, blue, highlight, sqllite.insert_data(nomjoueur, score))
         pygame.display.flip()
         clock.tick(30)
