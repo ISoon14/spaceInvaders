@@ -3,6 +3,7 @@ from entities.monster import Monster
 from entities.window import window
 from entities.hero import Hero
 from entities.balle import Bullet
+from entities.level import Level
 import time
 
 obj = window()
@@ -32,6 +33,7 @@ NbMonster = 25
 hero = Hero()
 all_sprites_list.add(hero)
 Monster.containers = monsterList
+imageLevel = ""
 
 
 def displayMonster(nb, speed):
@@ -63,6 +65,8 @@ xTouch = 0
 lastInsert = time.time()
 timeRespawn = 15
 speedMonster = 5
+levelNumber = 1
+lastDisplayImage = 0
 
 displayMonster(NbMonster, speedMonster)
 
@@ -108,8 +112,15 @@ while not done:
 
     if (time.time() - lastInsert) > timeRespawn:
         speedMonster += 1
+        levelNumber += 1
         displayMonster(8, speedMonster)
         lastInsert = time.time()
+        if levelNumber % 2 == 0:
+            level = Level(levelNumber)
+            imageLevel = level.getImage()
+            imageLevel = pygame.transform.scale(imageLevel, (100, 100))
+            lastDisplayImage = time.time()
+
 
     # Fait un écran blanc (j'ai fait ça pour mes testes)
     screen.fill((255, 255, 255))
@@ -123,7 +134,12 @@ while not done:
     letter = myfont.render("Prochaine vague dans : " + str(int(timeRespawn - (time.time() - lastInsert))) + ' secondes',
                            0, (0, 0, 0))
     screen.blit(letter, (screen.get_rect().width - 250, 10))
+    if imageLevel != "":
+        screen.blit(imageLevel, (300, 50))
+        if (time.time() - lastDisplayImage) > 5:
+            screen.blit(imageLevel, (-100, -100))
+            lastDisplayImage = 0
+            imageLevel = ""
     # Met à jour ce qu'on dessine
     pygame.display.flip()
-
     clock.tick(40)
