@@ -22,7 +22,7 @@ class Monster(py.sprite.Sprite):
             self.direction = 'left'
             self.rect.y += 15
 
-        if self.rect.x == 0:
+        if self.rect.x < 0:
             self.direction = 'right'
             self.rect.y += 15
 
@@ -33,6 +33,14 @@ class Monster(py.sprite.Sprite):
 
         if self.rect.y > self.surface.get_rect().height*0.85:
             self.speed = 0
+    def getY(self):
+        return self.rect.y
+    def getX(self):
+        return self.rect.x
+    def setSpeed(self, speed):
+        self.speed = speed
+    def getSpeed(self):
+        return self.speed
 
 
 
