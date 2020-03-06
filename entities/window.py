@@ -49,15 +49,12 @@ class window:
         else:
             pygame.draw.rect(self.frame, blue, (275, 350, 150, 50))
 
-        textLaunch = pygame.font.Font("tahoma.ttf", 30).render("Jouer !", True, black)
-        textLaunch.center = ((75 + (100 / 2)), (350 + (50 / 2)))
-        self.frame.blit(textLaunch)
+        myfont = pygame.font.SysFont("pictures/retroGaming.ttf", 35)
+        playTxt = myfont.render("Jouer !", 0, (black))
+        scoreTxt = myfont.render("Scores", 0, (black))
+        self.frame.blit(scoreTxt, (315, 360))
+        self.frame.blit(playTxt, (115, 360))
         pygame.display.flip()
 
     def getObject(self):
         return self.frame
-
-    def text_objects(text, font):
-        black = (0, 0, 0)
-        textSurface = font.render("Jouer !", True, black)
-        return textSurface, textSurface.get_rect()
