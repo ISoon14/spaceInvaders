@@ -1,6 +1,8 @@
 import pygame as py
 import time
 import sys
+from fonc_util import game_over
+from random import randrange
 
 class Monster(py.sprite.Sprite):
     def __init__(self, surface, line, column):
@@ -10,7 +12,8 @@ class Monster(py.sprite.Sprite):
         self.speed = 5
         line = 60 + 60 * line
         column = 50 * column
-        self.image = py.image.load(r'pictures/monster.png')
+        photo = randrange(10)
+        self.image = py.image.load(r'peoples/' + str(photo) + '.png')
         self.image = py.transform.scale(self.image, (30, 30))
         self.rect = self.image.get_rect()
         self.rect.x = line
@@ -32,7 +35,7 @@ class Monster(py.sprite.Sprite):
             self.rect.x = self.rect.x - self.speed
 
         if self.rect.y > self.surface.get_rect().height*0.85:
-            self.speed = 0
+            game_over(50)
     def getY(self):
         return self.rect.y
     def getX(self):
