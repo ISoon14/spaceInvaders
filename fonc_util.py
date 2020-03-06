@@ -64,7 +64,7 @@ def game_over(score):
                         nomjoueur = text
                     else:
                         text += event.unicode
-                        nomjoueur = text
+                        nomjoueur += text
 
         screen.fill((255, 255, 255))
         # Render the current text.
@@ -73,16 +73,20 @@ def game_over(score):
         width = max(200, txt_surface.get_width()+10)
         input_box.w = width
         # Blit the text.
-        screen.blit(txt_surface, (input_box.x+5, input_box.y+5))
+        screen.blit(txt_surface, (input_box.x + 100, input_box.y+5))
         screen.blit(score_text, (input_box.x + 250, input_box.y + 5))
         screen.blit(letter, (50, 10))
         # Blit the input_box rect.
         pygame.draw.rect(screen, color, input_box, 2)
         sqllite = Sqllite()
-        button(screen, "Enregistrer", 300, 175, 250, 50, blue, highlight, sqllite.insert_data(nomjoueur, score))
+        button(screen, "Enregistrer", 300, 200, 250, 50, blue, highlight, sqllite.insert_data(nomjoueur, score))
         classement = sqllite.get_classement()
+        i = 0
         for score_classement in classement:
-            print(score_classement)
+            myfont = pygame.font.SysFont("Arial", 15)
+            letter = myfont.render("Test à "+str(10*i)+" points", 0, (0, 0, 0))
+            i = i + 1
+            screen.blit(letter, (50, i*100))
         pygame.display.flip()
         clock.tick(30)
 
