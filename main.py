@@ -1,24 +1,49 @@
-import pygame
+import pygame, sys
+from entities.monster import Monster
 from entities.window import window
+from entities.hero import Hero
+from entities.balle import Bullet
+import time
 
 obj = window()
 obj.init()
+screen = obj.getObject()
+
+pygame.init()
+# Set the height and width of the screen
+screen_width = 700
+screen_height = 400
+screen = pygame.display.set_mode([screen_width, screen_height])
 
 # Liste de tout les sprites du jeux ( pour avoir un ensemble, utile pour le coté joueur en code)
 all_sprites_list = pygame.sprite.Group()
 
 # Liste des block (max appel là comme tu le sent juste un réfractoring fonctionnera avec moi)
-block_list = pygame.sprite.Group()
+monsterList = pygame.sprite.Group()
 
 # Liste de chaque balle tiré
 bullet_list = pygame.sprite.Group()
 
+NbMonster = 25
 
 # ICI ON INSTANCIE LES BLOCKS (chronologiquement pour que le code ne fasse pas d'erreur)
 
 # On instancie le héro
 hero = Hero()
 all_sprites_list.add(hero)
+Monster.containers = monsterList
+column = 0
+line = 0
+for i in range(0, NbMonster):
+    if i % 9 == 0:
+        column = column + 1
+        line = 0
+    else:
+        line = i % 5
+
+    monsterObj = Monster(screen, line, column)
+    monsterList.add(monsterObj)
+    all_sprites_list.add(monsterObj)
 
 # La condition d'arrêt du jeu
 done = False
@@ -26,6 +51,7 @@ done = False
 # Pour faire l'actualisation du jeu
 clock = pygame.time.Clock()
 
+lastShoot = 0
 score = 0
 hero.rect.y = 370
 
@@ -36,17 +62,19 @@ while not done:
             done = True
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            # Tire une balle si on clique
-            bullet = Bullet()
-            # On met la balle là ou est le joueur (le plus 24 c'est pour qu'il soit au centre de l'image)
-            bullet.rect.x = hero.rect.x +24
-            bullet.rect.y = hero.rect.y
-            # On l'ajoute dans le groupe
-            all_sprites_list.add(bullet)
-            bullet_list.add(bullet)
+            if time.time() - lastShoot > 0.8:
+                # Tire une balle si on clique
+                bullet = Bullet()
+                # On met la balle là ou est le joueur (le plus 24 c'est pour qu'il soit au centre de l'image)
+                bullet.rect.x = hero.rect.x + 24
+                bullet.rect.y = hero.rect.y
+                # On l'ajoute dans le groupe
+                all_sprites_list.add(bullet)
+                bullet_list.add(bullet)
+                lastShoot = time.time()
 
 
-    # Permet d'actualiser tout les objet (monstre, héros, balle et + si affinité), ça appel la methode update de chaque obj
+    # Permet d'actualiser tous les objets (monstre, héros, balle et + si affinité), ça appel la methode update de chaque obj
     all_sprites_list.update()
 
     # Les intéractions et actions de chaque balles
@@ -54,7 +82,7 @@ while not done:
 
         # Vérifie si on se cogne contre un monstre, le non de l'objet + le groupe qu'il cogne (se delete si il se croise)
         # et on le met dans la liste des block touché
-        block_hit_list = pygame.sprite.spritecollide(bullet, block_list, True)
+        block_hit_list = pygame.sprite.spritecollide(bullet, monsterList, True)
 
         # Pour chaque block touché on augmente le score
         for block in block_hit_list:
@@ -69,14 +97,16 @@ while not done:
             all_sprites_list.remove(bullet)
 
 
+
     # Fait un écran blanc (j'ai fait ça pour mes testes)
-    screen.fill(white)
+    screen.fill((255, 255, 255))
 
     # affiche tout les sprites
     all_sprites_list.draw(screen)
-
+    myfont = pygame.font.SysFont("Arial", 15)
+    letter = myfont.render("Score : "+str(score), 0, (0, 0, 0))
+    screen.blit(letter, (10, 10))
     # Met à jour ce qu'on dessine
     pygame.display.flip()
-
 
     clock.tick(20)
