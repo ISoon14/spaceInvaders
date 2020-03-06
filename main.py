@@ -6,10 +6,6 @@ from entities.balle import Bullet
 from entities.level import Level
 import time
 
-obj = window()
-obj.init()
-screen = obj.getObject()
-
 pygame.init()
 # Set the height and width of the screen
 screen_width = 700
@@ -34,7 +30,6 @@ hero = Hero()
 all_sprites_list.add(hero)
 Monster.containers = monsterList
 imageLevel = ""
-
 
 def displayMonster(nb, speed):
     column = 0
@@ -64,11 +59,11 @@ hero.rect.y = 370
 xTouch = 0
 lastInsert = time.time()
 timeRespawn = 15
-speedMonster = 5
+speedMonster = 0
 levelNumber = 1
 lastDisplayImage = 0
 
-displayMonster(NbMonster, speedMonster)
+
 
 while not done:
     # --- Gestion des évènement du jeu
@@ -87,6 +82,12 @@ while not done:
                 all_sprites_list.add(bullet)
                 bullet_list.add(bullet)
                 lastShoot = time.time()
+
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+               if speedMonster == 0:
+                   speedMonster = 5
+                   displayMonster(NbMonster, speedMonster)
 
 
     # Permet d'actualiser tous les objets (monstre, héros, balle et + si affinité), ça appel la methode update de chaque obj
@@ -120,7 +121,6 @@ while not done:
             imageLevel = level.getImage()
             imageLevel = pygame.transform.scale(imageLevel, (100, 100))
             lastDisplayImage = time.time()
-
 
     # Fait un écran blanc (j'ai fait ça pour mes testes)
     screen.fill((255, 255, 255))

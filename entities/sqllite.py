@@ -3,8 +3,8 @@ import sqlite3
 class Sqllite:
 
     def __init__(self):
-        conn = sqlite3.connect('bdd_invader.db')
-        cursor = conn.cursor()
+        self.conn = sqlite3.connect('bdd_invader.db')
+        self.cursor = self.conn.cursor()
 
     def reset_table(self):
         self.cursor.execute("""DROP TABLE Classement""")
@@ -21,7 +21,8 @@ class Sqllite:
         self.cursor.execute("""
         INSERT INTO classement(nomJoueur, score) VALUES(?, ?)""", (nomJoueur,score))
         self.conn.commit()
+        self.get_classement()
 
     def get_classement(self):
         result = self.cursor.execute("""SELECT nomJoueur, score FROM classement order by score desc limit 10 """)
-        return self.cursor.fetchAll()
+        return result.fetchAll()

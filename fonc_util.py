@@ -1,5 +1,5 @@
 import pygame
-import entities.sqllite
+from entities.sqllite import Sqllite
 
 # param = textBtn, posX, psoY, width, height, color, color hoover, function called
 def button(screen, msg, x, y, w, h, ic, ac, action=None):
@@ -37,6 +37,7 @@ def game_over(score):
     color = color_inactive
     active = False
     text = ''
+    nomjoueur = ""
     done = False
     while not done:
         for event in pygame.event.get():
