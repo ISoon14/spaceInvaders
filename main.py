@@ -31,6 +31,9 @@ all_sprites_list.add(hero)
 Monster.containers = monsterList
 imageLevel = ""
 
+myfont = pygame.font.SysFont("Arial", 15)
+title = myfont.render("Appuyez sur espace pour commencer",0, (0, 0, 0))
+
 def displayMonster(nb, speed):
     column = 0
     line = 0
@@ -88,6 +91,7 @@ while not done:
                if speedMonster == 0:
                    speedMonster = 5
                    displayMonster(NbMonster, speedMonster)
+                   screen.blit(title, (-50, -50))
 
 
     # Permet d'actualiser tous les objets (monstre, héros, balle et + si affinité), ça appel la methode update de chaque obj
@@ -134,8 +138,10 @@ while not done:
     letter = myfont.render("Prochaine vague dans : " + str(int(timeRespawn - (time.time() - lastInsert))) + ' secondes',
                            0, (0, 0, 0))
     screen.blit(letter, (screen.get_rect().width - 250, 10))
+    if speedMonster == 0:
+        screen.blit(title, (200, 50))
     if imageLevel != "":
-        screen.blit(imageLevel, (300, 50))
+        screen.blit(imageLevel, (250, 50))
         if (time.time() - lastDisplayImage) > 5:
             screen.blit(imageLevel, (-100, -100))
             lastDisplayImage = 0
